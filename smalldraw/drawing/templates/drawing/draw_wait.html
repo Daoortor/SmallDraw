@@ -1,0 +1,19 @@
+{% extends "drawing/base.html" %}
+
+{% block title %}Waiting...{% endblock %}
+
+{% load static %}
+
+{% block head %}<script src="{% static 'js/draw_wait.js' %}"></script>{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+    <div class="row"><div class="col"><h3>Waiting for your opponent...</h3></div></div>
+</div>
+<script>
+    main('{{ csrf_token }}',
+            '{% url 'check' game.id player %}',
+            '{% url 'guess_wait' game.id player %}',
+            '{% url 'end' game.id player %}');
+</script>
+{% endblock %}

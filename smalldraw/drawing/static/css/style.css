@@ -1,0 +1,45 @@
+.header-row {
+    padding: 10px;
+    background-color: #ffdb57;
+}
+
+.error-row {
+    height: 20px;
+}
+
+.header-col {
+    -ms-flex: 0 0 230px;
+    flex: 0 0 230px;
+    width: 100px;
+}
+
+.content-col {
+    text-align: center;
+}
+
+.logo {
+    color: #999;
+}
+
+#start-form {
+    text-align: left;
+    margin-top: 30px;
+}
+
+#host-link {
+    margin-top: 15px;
+}
+
+#cat-form-btn {
+    width: 100px;
+}
+
+#canvas {
+    border:2px solid;
+    width: 350px;
+    height: 200px;
+}
+
+#rules-row {
+    max-width: 400px;
+}

@@ -21,7 +21,7 @@ def host(request):
             n_rounds = form.cleaned_data['n_rounds']
             game = Game(n_rounds=n_rounds)
             game.save()
-            return redirect(f'/start?alert_type=game_created&alert={game.pk}')
+            return redirect(f'/start?&alert=Game created with id {game.pk}')
     return render(request, 'drawing/host.html', {'form': form})
 
 
@@ -70,8 +70,8 @@ def choose_cat(request, game_id, player, alert=''):
                 return HttpResponseRedirect(f'/play/{game_id}/first/choose_word/cat={category.id}')
             else:
                 return HttpResponseRedirect(f'/play/{game_id}/second/choose_word/cat={category.id}')
-    params = {'form': form, 'game_id': game_id, 'player': player, 'alert': alert}
-    return render(request, 'drawing/play/draw/choose_category.html', params)
+    params = {'form': form, 'game': game, 'player': player, 'alert': alert}
+    return render(request, 'drawing/choose_category.html', params)
 
 
 def choose_word(request, game_id, player, category_id):
@@ -96,11 +96,12 @@ def choose_word(request, game_id, player, category_id):
         request.session['choice_words'] = words
         form = WordForm(words=words)
         context = {'form': form, 'game': game, 'player': player, 'category_id': category_id}
-        return render(request, 'drawing/play/draw/choose_word.html', context)
+        return render(request, 'drawing/choose_word.html', context)
 
 
 def draw(request, game_id, player):
     game = get_object_or_404(Game, pk=game_id)
+    context = {'game': game, 'player': player}
     if request.is_ajax():
         # DON'T YOU DARE TOUCH THIS
         datauri = unquote(request.body)
@@ -110,16 +111,16 @@ def draw(request, game_id, player):
         out = open(path, 'wb')
         out.write(binary_data)
         out.close()
-        time_elapsed = request.POST.get('time_elapsed', None)
-        word = get_object_or_404(Word, pk=game.secret_word)
-        category = get_object_or_404(Category, pk=word.category_id)
+        time_elapsed = int(request.POST.get('time_elapsed', None))
+        word = get_object_or_404(Word, word=game.secret_word)
+        category = word.category_id
         base_points = category.points
         converted_points = game.points_converter(base_points, time_elapsed)
         game.add_points(player, converted_points)
-        game.end_turn()
+        if not game.end_turn():
+            return HttpResponseRedirect(request, f'/{game.id}/{player}/end')
         return HttpResponse('')
-    context = {'game': game, 'player': player}
-    return render(request, 'drawing/play/draw/draw.html', context)
+    return render(request, 'drawing/draw.html', context)
 
 
 def guess(request, game_id, player):
@@ -135,7 +136,8 @@ def guess(request, game_id, player):
                 alert = f'You guessed! You get {category.points} points'
             else:
                 alert = "You didn't guess. You don't get any points"
-            game.end_turn()
+            if not game.end_turn():
+                return HttpResponseRedirect(request, f'/{game.id}/{player}/end')
             return HttpResponseRedirect(f'/play/{game_id}/{player}/choose_cat?alert={alert}')
     else:
         words = [game.secret_word.word] + game.generate_words(N_WORD_CHOICES - 1, category.id)
@@ -145,17 +147,19 @@ def guess(request, game_id, player):
         picture_path = f'jpg/game{game_id}_pic.jpg'
         context = {'form': form, 'game': game, 'player': player, 'category_id': category.id,
                    'picture_path': picture_path}
-        return render(request, 'drawing/play/guess/guess.html', context)
+        return render(request, 'drawing/guess.html', context)
 
 
 def draw_wait(request, game_id, player):
-    context = {'game_id': game_id, 'player': player}
-    return render(request, 'drawing/play/draw/wait.html', context)
+    game = get_object_or_404(Game, pk=game_id)
+    context = {'game': game, 'player': player}
+    return render(request, 'drawing/draw_wait.html', context)
 
 
 def guess_wait(request, game_id, player):
-    context = {'game_id': game_id, 'player': player}
-    return render(request, 'drawing/play/guess/wait.html', context)
+    game = get_object_or_404(Game, pk=game_id)
+    context = {'game': game, 'player': player}
+    return render(request, 'drawing/guess_wait.html', context)
 
 
 # DON'T YOU DARE TOUCH THAT
@@ -163,8 +167,32 @@ def guess_wait(request, game_id, player):
 def check_status(request, game_id, player):
     if request.is_ajax():
         game = get_object_or_404(Game, pk=game_id)
-        if game.turn ^ (player == 'first') ^ game.drawing_finished:
+        if game.is_finished():
+            return JsonResponse({'message': 'End'})
+        elif game.turn ^ (player == 'first') ^ game.drawing_finished:
             return JsonResponse({'message': 'Ready!'})
         return JsonResponse({'message': 'Not ready'})
+    return HttpResponse('Forbidden')
+
+
+def end(request, game_id, player):
+    game = get_object_or_404(Game, pk=game_id)
+    if game.first_points == game.second_points:
+        result = 'Tie!'
+    elif (player == 'first') == (game.first_points > game.second_points):
+        result = 'You win!'
     else:
-        return HttpResponse('Forbidden')
+        result = 'You lose...'
+    if player == 'first':
+        your_points = game.first_points
+        opponent_points = game.second_points
+    else:
+        your_points = game.second_points
+        opponent_points = game.first_points
+    context = {'game': game, 'player': player, 'result': result, 'your_points': your_points,
+               'opponent_points': opponent_points}
+    return render(request, 'drawing/end.html', context)
+
+
+def rules(request):
+    return render(request, 'drawing/rules.html')

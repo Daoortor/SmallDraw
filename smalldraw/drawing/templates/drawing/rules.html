@@ -1,0 +1,56 @@
+{% extends "drawing/base.html" %}
+
+{% block title %}Rules{% endblock %}
+
+{% block content %}
+    <div class="row mt-3" id="rules-row">
+        <div class="col">
+            <h1>Rules</h1>
+            <p class="rules-p">
+                Welcome to Small Draw! This is a game where you need to explain words with simplistic doodles.
+            </p>
+            <p class="rules-p">
+                Number of players: 2
+            </p>
+            <p class="rules-p">
+                Playing time: 2-3 min/round
+            </p>
+            <p class="rules-p">
+                To play a game, you need to host it first (click on the "Host tab").
+                Choose the number of rounds and click "Create".
+                You'll be given an id which you and your partner will need to enter on the start page.
+                Choose whether you want to play first or second
+                (don't choose the same as your partner, it'll probably break the game.)
+            </p>
+            <p class="rules-p">
+                The first player then chooses a word category: Normal, Fake or Hard.
+                Then they choose one of 4 words randomly selected from our dictionary.
+            </p>
+            <p class="rules-p">
+                Depending on the gamemode, they need to doodle a word in some sort of a "minimal" way
+                (for now, there's just one gamemode where you need to draw as quick as possible).
+            </p>
+            <p class="rules-p">
+                This picture is sent to the second player that has to guess what word their opponent meant.
+                If they guess correctly, they get 100 points, and their opponent receives 50-200 points depending on their efficiency
+                (hard words increase the points by 50%, fake words double them.)
+                Then, players switch their roles.
+            </p>
+            <p class="rules-p">
+                After several rounds, the player who has more points wins.
+            </p>
+            <p class="rules-p">
+                This game is inspired by:
+            </p>
+            <p class="rules-p">
+                Quick, Draw!
+            </p>
+            <p class="rules-p">
+                The Hat
+            </p>
+            <p class="rules-p">
+                Imaginarium
+            </p>
+        </div>
+    </div>
+{% endblock %}

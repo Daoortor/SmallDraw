@@ -1,0 +1,18 @@
+{% extends "drawing/base.html" %}
+
+{% block title %}Choose word{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+  <div class="row"><div class="col"><h1>Choose word</h1></div></div>
+  <form action="{% url 'choose_word' game_id=game.id player=player category_id=category_id %}" method="post">
+    {% csrf_token %}
+    <div class="row mt-3 g-0 justify-content-center align-items-center">
+      <div class="p-1 auto form-col px-0">{{ form.word }}</div>
+    </div>
+    <div class="row g-0 justify-content-center align-items-center">
+      <div class="p-1 auto form-col px-0"><button class="btn btn-info" id="cat-form-btn">Choose</button></div>
+    </div>
+  </form>
+</div>
+{% endblock %}

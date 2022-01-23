@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <title>{% block title %}Title{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+{% load static %}
+{% if alert %}
+    <script>alert('{{alert}}');</script>
+{% endif %}
+<div class="container shadow min-vh-100 py-2">
+    <div class="row min-vh-50 header-row justify-content-center">
+        <div class="col min-vh-50 header-col d-flex justify-content-center align-items-center">
+            <h3 class="logo">Small Draw</h3>
+        </div>
+        <div class="col min-vh-50 header-col d-flex justify-content-center align-items-center">
+            <a href="{% url 'rules' %}" class="link-primary">Rules</a>
+        </div>
+        <div class="col min-vh-50 header-col d-flex justify-content-center align-items-center">
+            <a href="{% url 'start' %}" class="link-primary">Join a game</a>
+        </div>
+        <div class="col min-vh-50 header-col d-flex justify-content-center align-items-center">
+            <a href="{% url 'host' %}" class="link-primary">Host a new game</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-auto">
+            {% if game %}
+                <div class="col py-2 d-flex justify-content-center align-items-center">
+                    <div class="row-auto g-0">
+                        <div class="col">
+                            <p class="logo">
+                                Round:
+                                <h5 class="logo">{{ game.round }}</h5>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-auto">
+            {% if player %}
+                <div class="col py-2 d-flex justify-content-center align-items-center">
+                    <div class="row-auto g-0">
+                        <div class="col">
+                            <p class="logo">
+                                You have:
+                                {% if player == 'first' %}
+                                    <h5 class="logo">{{ game.first_points }} points</h5>
+                                {% else %}
+                                    <h5 class="logo">{{ game.second_points }} points</h5>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row error-row justify-content-center align-items-center">
+        <div class="col-auto error-col">
+            {% if error %}
+                <p class="text-danger">Error!</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto content-col justify-content-center align-items-center" id="content">
+            {% block content %}<h1>Content</h1>{% endblock %}
+        </div>
+    </div>
+</div>

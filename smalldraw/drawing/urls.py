@@ -15,4 +15,6 @@ urlpatterns = [
     path('play/<int:game_id>/<player>/draw_wait', views.draw_wait, name='draw_wait'),
     path('play/<int:game_id>/<player>/guess_wait', views.guess_wait, name='guess_wait'),
     path('play/<int:game_id>/<player>/check', views.check_status, name='check'),
+    path('play/<int:game_id>/<player>/end', views.end, name='end'),
+    path('rules', views.rules, name='rules')
 ]

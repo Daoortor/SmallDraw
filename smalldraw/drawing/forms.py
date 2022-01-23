@@ -7,7 +7,7 @@ from .models import Category, Game, Word
 class HostForm(forms.ModelForm):
     class Meta:
         model = Game
-        fields = ['n_rounds']
+        fields = ('n_rounds',)
         labels = {
             'n_rounds': _('Number of rounds'),
         }

@@ -1,30 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>SmallDraw</title>
-</head>
-<body>
-    {% if error %}
-        <p style="color: #FFOOOO"><u>{{ error }}</u></p>
-    {% endif %}
-    {% if alert %}
-        {% if alert_type == 'game_created' %}
-            <script>
-                alert("Game created with id " + {{ alert }})
-            </script>
-        {% endif %}
-    {% endif %}
+{% extends "drawing/base.html" %}
+
+{% block title %}SmallDraw{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+    <div class="row"><div class="col"><h1>Join a game</h1></div></div>
     <form action="{% url 'start' %}" method="post">
         {% csrf_token %}
-        {{ form.id }}<br>
-        {{ form.player }}<br>
-        <button class="btn btn-info">Enter</button>
+        <div class="row mt-3"><div class="col d-flex justify-content-between">{{ form.id }}</div></div>
+        <div class="row mt-1"><div class="col d-flex justify-content-between">{{ form.player }}</div></div>
+        <div class="row mt-2"><div class="col d-flex justify-content-between"><button class="btn btn-info">Enter</button><br></div></div>
+        <div class="row">
+            <div class="col d-flex justify-content-between">
+                <a href="{% url 'host' %}" class="link-primary" id="host-link">Host a new game</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col d-flex justify-content-between">
+                <a href="{% url 'rules' %}" class="link-primary">Rules</a>
+            </div>
+        </div>
     </form>
-    <a href="{% url 'host' %}"><u>Host your own game!</u></a>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "drawing/base.html" %}
+
+{% block title %}Guess{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<div class="container py-2">
+    <div class="row"><div class="col"><h3>Draw a picture of your word</h3></div></div>
+    <div class="row">
+        <div class="col">
+            <span class="badge badge-light">
+                Your opponent drew this picture.<br>
+                Which of these words did he mean?
+            </span>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col d-flex justify-content-between">
+            <img src="{% static picture_path %}">
+        </div>
+    </div>
+    <form action="{% url 'guess' game_id=game.id player=player %}" method="post">
+        {% csrf_token %}
+        <div class="row mt-3"><div class="col d-flex justify-content-between">{{ form.word }}</div></div>
+        <div class="row mt-2"><div class="col d-flex justify-content-between"><button class="btn btn-info">Choose</button><br></div></div>
+    </form>
+</div>
+{% endblock %}

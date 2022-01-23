@@ -65,7 +65,6 @@ class Game(models.Model):
         self.save()
 
     def end_turn(self):
-        print('Ending turn...')
         if not self.drawing_finished:
             self.drawing_finished = True
             self.save()
@@ -82,3 +81,6 @@ class Game(models.Model):
         self.turn = True
         self.save()
         return True
+
+    def is_finished(self):
+        return self.round >= self.n_rounds

@@ -1,0 +1,26 @@
+{% extends "drawing/base.html" %}
+
+{% block title %}{{ result }}{% endblock %}
+
+{% block content %}
+    <div class="row"><div class="col"><h1>{{ result }}</h1></div></div>
+    <div class="row mt-2">
+        <div class="col d-flex justify-content-center">
+            <span class="badge badge-pill badge-light">
+                You got {{ your_points }} points.
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <span class="badge badge-pill badge-light">
+                Your opponent got {{ opponent_points }} points.
+            </span>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col d-flex justify-content-center">
+            <a href="{% url 'start' %}" class="link-primary">Join a new game</a>
+        </div>
+    </div>
+{% endblock %}

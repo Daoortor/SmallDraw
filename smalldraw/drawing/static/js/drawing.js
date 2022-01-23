@@ -3,6 +3,7 @@ var canvas, ctx, flag = false,
     currX = 0,
     prevY = 0,
     currY = 0,
+    BB = 0,
     dot_flag = false;
 
 var x = "black",
@@ -46,8 +47,9 @@ function findxy(res, e) {
     if (res == 'down') {
         prevX = currX;
         prevY = currY;
-        currX = e.clientX - canvas.offsetLeft;
-        currY = e.clientY - canvas.offsetTop;
+        BB = canvas.getBoundingClientRect();
+        currX = 0.86 * (e.clientX - BB.left);
+        currY = 0.76 * (e.clientY - BB.top);
 
         flag = true;
         dot_flag = true;
@@ -66,8 +68,9 @@ function findxy(res, e) {
         if (flag) {
             prevX = currX;
             prevY = currY;
-            currX = e.clientX - canvas.offsetLeft;
-            currY = e.clientY - canvas.offsetTop;
+            BB = canvas.getBoundingClientRect();
+            currX = 0.86 * (e.clientX - BB.left);
+            currY = 0.76 * (e.clientY - BB.top);
             draw();
         }
     }

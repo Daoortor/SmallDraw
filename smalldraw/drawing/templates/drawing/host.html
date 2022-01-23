@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Host</title>
-</head>
-<body>
+{% extends "drawing/base.html" %}
+
+{% block title %}Host{% endblock %}
+
+{% block content %}
+<h1>Start a new game</h1>
+<div id="form" style="text-align: left; margin-top: 30px;">
     <form action="{% url 'host' %}" method="post">
         {% csrf_token %}
+        {% if form.n_rounds.errors %}
+            {{ form.n_rounds.errors }}<br>
+        {% endif %}
+        <p>Number of rounds:</p>
         {{ form.n_rounds }}<br>
-        <button class="btn btn-info">Create game</button>
+        <button class="btn btn-info" style="margin-top: 10px;">Create game</button>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
